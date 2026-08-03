@@ -23,6 +23,7 @@ public:
 	void start(server_binary_fingerprint detected_fingerprint);
 	void unload();
 	void on_game_frame();
+	void check_now();
 
 private:
 	enum class request_kind

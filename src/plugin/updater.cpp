@@ -571,6 +571,23 @@ void updater_service::unload()
 	release_selection_failed_ = false;
 }
 
+void updater_service::check_now()
+{
+	if (!settings::current().automatic_updates)
+	{
+		Msg("[CS2FOW] Automatic updates are off.\n");
+		return;
+	}
+	if (staging_.valid() || request_ != INVALID_HTTPREQUEST_HANDLE)
+	{
+		Msg("[CS2FOW] An update check is already running.\n");
+		return;
+	}
+	Msg("[CS2FOW] Checking for an update now.\n");
+	next_check_ = std::chrono::steady_clock::now();
+	check_release();
+}
+
 void updater_service::on_game_frame()
 {
 	poll_staging();
