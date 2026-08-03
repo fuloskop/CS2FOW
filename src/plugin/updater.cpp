@@ -569,6 +569,7 @@ void updater_service::unload()
 	package_size_ = 0;
 	http_unavailable_warned_ = false;
 	release_selection_failed_ = false;
+	forced_check_ = false;
 }
 
 void updater_service::check_now()
@@ -583,9 +584,19 @@ void updater_service::check_now()
 		Msg("[CS2FOW] An update check is already running.\n");
 		return;
 	}
+	const fs::path root = csgo_root();
+	std::error_code error;
+	if (!root.empty() && fs::exists(pending_marker(root), error))
+	{
+		Msg("[CS2FOW] An update is already prepared; restart the server to "
+			"install it.\n");
+		return;
+	}
 	Msg("[CS2FOW] Checking for an update now.\n");
 	next_check_ = std::chrono::steady_clock::now();
 	check_release();
+	// Report the outcome only when the request actually went out.
+	forced_check_ = request_kind_ == request_kind::release;
 }
 
 void updater_service::on_game_frame()
@@ -734,8 +745,14 @@ void updater_service::on_completed(HTTPRequestCompleted_t *result, bool failed)
 	}
 	if (completed_kind == request_kind::release)
 	{
+		const bool forced = forced_check_;
+		forced_check_ = false;
 		if (!select_release(body))
 		{
+			if (forced && !release_selection_failed_)
+			{
+				Msg("[CS2FOW] CS2FOW is already up to date.\n");
+			}
 			next_check_ = std::chrono::steady_clock::now()
 				+ (release_selection_failed_ ? k_retry_delay
 					: k_regular_check_delay);
