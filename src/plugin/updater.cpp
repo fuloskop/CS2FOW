@@ -569,16 +569,11 @@ void updater_service::unload()
 	package_size_ = 0;
 	http_unavailable_warned_ = false;
 	release_selection_failed_ = false;
-	forced_check_ = false;
+	manual_check_ = false;
 }
 
 void updater_service::check_now()
 {
-	if (!settings::current().automatic_updates)
-	{
-		Msg("[CS2FOW] Automatic updates are off.\n");
-		return;
-	}
 	if (staging_.valid() || request_ != INVALID_HTTPREQUEST_HANDLE)
 	{
 		Msg("[CS2FOW] An update check is already running.\n");
@@ -595,8 +590,9 @@ void updater_service::check_now()
 	Msg("[CS2FOW] Checking for an update now.\n");
 	next_check_ = std::chrono::steady_clock::now();
 	check_release();
-	// Report the outcome only when the request actually went out.
-	forced_check_ = request_kind_ == request_kind::release;
+	// Carries the manual run through the automatic path's own guards, and
+	// reports the outcome once the check finishes.
+	manual_check_ = request_kind_ == request_kind::release;
 }
 
 void updater_service::on_game_frame()
@@ -606,7 +602,7 @@ void updater_service::on_game_frame()
 	{
 		return;
 	}
-	if (!settings::current().automatic_updates)
+	if (!settings::current().automatic_updates && !manual_check_)
 	{
 		if (request_ != INVALID_HTTPREQUEST_HANDLE)
 		{
@@ -714,7 +710,7 @@ void updater_service::on_completed(HTTPRequestCompleted_t *result, bool failed)
 	{
 		return;
 	}
-	if (!settings::current().automatic_updates)
+	if (!settings::current().automatic_updates && !manual_check_)
 	{
 		cancel_request();
 		return;
@@ -745,14 +741,13 @@ void updater_service::on_completed(HTTPRequestCompleted_t *result, bool failed)
 	}
 	if (completed_kind == request_kind::release)
 	{
-		const bool forced = forced_check_;
-		forced_check_ = false;
 		if (!select_release(body))
 		{
-			if (forced && !release_selection_failed_)
+			if (manual_check_ && !release_selection_failed_)
 			{
 				Msg("[CS2FOW] CS2FOW is already up to date.\n");
 			}
+			manual_check_ = false;
 			next_check_ = std::chrono::steady_clock::now()
 				+ (release_selection_failed_ ? k_retry_delay
 					: k_regular_check_delay);
@@ -765,6 +760,7 @@ void updater_service::on_completed(HTTPRequestCompleted_t *result, bool failed)
 	{
 		if (!select_manifest(body))
 		{
+			manual_check_ = false;
 			next_check_ = std::chrono::steady_clock::now()
 				+ (release_selection_failed_ ? k_retry_delay
 					: k_regular_check_delay);
@@ -793,6 +789,7 @@ void updater_service::cancel_request()
 void updater_service::retry_later(const char *reason)
 {
 	cancel_request();
+	manual_check_ = false;
 	next_check_ = std::chrono::steady_clock::now() + k_retry_delay;
 	Warning("[CS2FOW] %s The current version will keep running, and CS2FOW "
 		"will try again later.\n",
@@ -993,6 +990,7 @@ void updater_service::poll_staging()
 	{
 		Msg("[CS2FOW] CS2FOW %s is ready. It will be installed the next "
 			"time the server starts.\n", result.version.c_str());
+		manual_check_ = false;
 		next_check_ = std::chrono::steady_clock::now() + k_regular_check_delay;
 		return;
 	}

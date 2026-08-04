@@ -75,7 +75,7 @@ private:
 	std::future<stage_result> staging_;
 	bool http_unavailable_warned_ {};
 	bool release_selection_failed_ {};
-	bool forced_check_ {};
+	bool manual_check_ {};
 };
 
 } // namespace cs2fow
