@@ -353,6 +353,10 @@ cs2fow_baker --inspect-bvh8 <file>
 cs2fow_baker --game <cs2-root> --map workshop/123/de_example --vpk <outer_dir.vpk> --output de_example.bvh8
 ```
 
+## Support development
+
+CS2FOW is free and independently maintained. If it helps your server, even a small one-time or monthly contribution helps me keep up with CS2 updates, testing, Windows and Linux builds, report investigation, and community support: [Support development](https://buymeacoffee.com/karola3vax).
+
 ## License
 
 CS2FOW is free and open-source software licensed under the [MIT License](LICENSE). Generated map files come from Counter-Strike 2 game data and are covered by [DATA_NOTICE](DATA_NOTICE). Dependencies keep their own licenses; see [Third-party notices](THIRD_PARTY_NOTICES).

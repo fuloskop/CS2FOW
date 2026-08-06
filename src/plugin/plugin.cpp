@@ -179,6 +179,7 @@ bool plugin::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool l
 		META_CONPRINTF("[CS2FOW] HE smoke clearing unavailable; ordinary smoke remains active\n");
 	}
 	META_CONPRINTF("[CS2FOW] loaded; culling is fail-open until a map bake validates\n");
+	META_CONPRINTF("[CS2FOW] Free and independently maintained. Support continued updates: https://buymeacoffee.com/karola3vax\n");
 	return true;
 }
 
@@ -930,6 +931,7 @@ void plugin::print_status() const
 	{
 		META_CONPRINTF("[CS2FOW] Next action: %s\n", action);
 	}
+	META_CONPRINTF("[CS2FOW] Free and independently maintained. Support continued updates: https://buymeacoffee.com/karola3vax\n");
 }
 
 void plugin::print_metrics() const
