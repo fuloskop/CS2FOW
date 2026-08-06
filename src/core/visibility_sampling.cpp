@@ -19,8 +19,8 @@ constexpr float k_degrees_to_radians = 0.017453292519943295769f;
 constexpr float k_standing_player_height = 72.0f;
 constexpr float k_pelvis_height = 38.0f;
 constexpr float k_muzzle_z = 60.0f;
-constexpr float k_horizontal_bounds_padding = 16.0f;
-constexpr float k_top_bounds_padding = 4.0f;
+constexpr float k_horizontal_bounds_padding = 8.0f;
+constexpr float k_top_bounds_padding = 8.0f;
 
 float distance_sq(vec3 a, vec3 b)
 {

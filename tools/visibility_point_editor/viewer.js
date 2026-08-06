@@ -20,8 +20,8 @@ const k_viewer_distance = 256;
 const k_eye_height = 64;
 const k_shoulder_offset = 48;
 const k_vertical_origin_offset = 16;
-const k_horizontal_bounds_padding = 16;
-const k_top_bounds_padding = 4;
+const k_horizontal_bounds_padding = 8;
+const k_top_bounds_padding = 8;
 const k_aabb_dot_radius = 0.022 / 3.0;
 const k_muzzle_dot_radius = 0.038 / 3.0;
 const k_animation_transition_seconds = 0.22;
@@ -4098,7 +4098,7 @@ function run_self_checks()
 		&& end.every(Number.isFinite) && Number.isFinite(radius) && radius > 0),
 		"runtime capsule bindings");
 	expect(generated_aabb_points().length === 8, "runtime AABB count");
-	expect(generated_aabb_points()[0].x === -32 && generated_aabb_points()[7].z === 76, "runtime AABB padding");
+	expect(generated_aabb_points()[0].x === -24 && generated_aabb_points()[7].z === 80, "runtime AABB padding");
 	const viewer_origins = stationary_viewer_origins();
 	expect(viewer_origins.length === 5 && viewer_origins[0].x === 256, "fixed viewer origins");
 	expect(new Set(viewer_origins.map((point) => `${point.x},${point.y},${point.z}`)).size === 5, "stationary origins are unique");

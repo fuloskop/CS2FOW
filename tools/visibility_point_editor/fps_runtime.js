@@ -693,14 +693,14 @@ export function target_aabb(bot)
 {
 	const height = target_height(bot);
 	return new Float32Array([
-		bot.origin.x - 32, bot.origin.y - 32, bot.origin.z,
-		bot.origin.x + 32, bot.origin.y - 32, bot.origin.z,
-		bot.origin.x - 32, bot.origin.y + 32, bot.origin.z,
-		bot.origin.x + 32, bot.origin.y + 32, bot.origin.z,
-		bot.origin.x - 32, bot.origin.y - 32, bot.origin.z + height + 4,
-		bot.origin.x + 32, bot.origin.y - 32, bot.origin.z + height + 4,
-		bot.origin.x - 32, bot.origin.y + 32, bot.origin.z + height + 4,
-		bot.origin.x + 32, bot.origin.y + 32, bot.origin.z + height + 4
+		bot.origin.x - 24, bot.origin.y - 24, bot.origin.z,
+		bot.origin.x + 24, bot.origin.y - 24, bot.origin.z,
+		bot.origin.x - 24, bot.origin.y + 24, bot.origin.z,
+		bot.origin.x + 24, bot.origin.y + 24, bot.origin.z,
+		bot.origin.x - 24, bot.origin.y - 24, bot.origin.z + height + 8,
+		bot.origin.x + 24, bot.origin.y - 24, bot.origin.z + height + 8,
+		bot.origin.x - 24, bot.origin.y + 24, bot.origin.z + height + 8,
+		bot.origin.x + 24, bot.origin.y + 24, bot.origin.z + height + 8
 	]);
 }
 

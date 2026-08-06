@@ -6,7 +6,7 @@ The Studio shows:
 
 - local CT SAS and Phoenix models with real exported animation clips;
 - nineteen animated hitbox capsules driven by the runtime bone bindings;
-- eight AABB corners padded 16 units sideways and 4 units upward;
+- eight AABB corners padded 8 units sideways and 8 units upward;
 - the held weapon's separate runtime muzzle point;
 - direct BVH8 map loading, collision walls, viewing origins, and actual debug rays; and
 - a 64 Hz first-person range with movement, navigation, weapons, smoke, HE clearing, sounds, and Runtime LOS/Debug views.

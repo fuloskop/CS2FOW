@@ -44,8 +44,8 @@ assert.match(nativeSettings, /cs2fow_visibility_hold_ms[\s\S]{0,160}\b1000, true
 for (const [source, pattern, name] of [
 	[nativeSamplingHeader, /k_visibility_pixel_grid_size\s*=\s*32/, "32x32 visibility grid"],
 	[nativeSamplingHeader, /k_visibility_aabb_point_count\s*=\s*8/, "AABB point count"],
-	[nativeSampling, /k_horizontal_bounds_padding\s*=\s*16\.0f/, "AABB side padding"],
-	[nativeSampling, /k_top_bounds_padding\s*=\s*4\.0f/, "AABB top padding"],
+	[nativeSampling, /k_horizontal_bounds_padding\s*=\s*8\.0f/, "AABB side padding"],
+	[nativeSampling, /k_top_bounds_padding\s*=\s*8\.0f/, "AABB top padding"],
 	[nativeRaster, /k_near_depth\s*=\s*0\.125f/, "near depth"],
 	[nativeRaster, /k_view_margin\s*=\s*1\.02f/, "view margin"],
 	[nativeRaster, /k_depth_epsilon\s*=\s*1\.0e-5f/, "depth epsilon"],
@@ -204,7 +204,7 @@ assert.equal(muzzleFallback.tracedRays, 9,
 	"the eight blocked AABB corners and clear muzzle must all be counted");
 const aabbFallbackMap = test_map(occludingWall);
 aabbFallbackMap.segment_blocked = (_start, end) =>
-	({blocked: Math.abs(end.x - 68) > 0.001, packet: 0});
+	({blocked: Math.abs(end.x - 76) > 0.001, packet: 0});
 const aabbFallback = trace_capsule_target(aabbFallbackMap,
 	{origin: {x: 0, y: 0, z: 0}, eye: capsuleOrigin, yaw: 0, pingMs: 0, buttons: {}},
 	capsule_target({x: 100, y: 0, z: 0}, 0), {targetOrigin: {x: 100, y: 0, z: 0}});
@@ -324,14 +324,14 @@ assert.throws(() => validate_nav({version: 1, areas: [{id: 1, corners: [], conne
 
 const standingAabb = target_aabb({origin: {x: 10, y: 20, z: 30}, yaw: 90, crouched: false});
 assert.equal(standingAabb.length, 24, "runtime target must include eight AABB corners");
-assert.deepEqual(Array.from(standingAabb.slice(0, 3)), [-22, -12, 30],
-	"runtime AABB must use 16-unit side padding");
+assert.deepEqual(Array.from(standingAabb.slice(0, 3)), [-14, -4, 30],
+	"runtime AABB must use 8-unit side padding");
 const nativeMuzzle = target_muzzle({origin: {x: 10, y: 20, z: 30}, yaw: 90, crouched: false}, 36);
 assert.ok(Math.abs(nativeMuzzle.x - 10) < 0.001 && Math.abs(nativeMuzzle.y - 56) < 0.001 && nativeMuzzle.z === 90);
 const interpolatedMuzzle = target_muzzle({origin: {x: 0, y: 0, z: 0}, yaw: 0, height: 54}, 36);
 assert.ok(interpolatedMuzzle.z > 38 && interpolatedMuzzle.z < 60, "interpolated stance height must move the muzzle smoothly");
 const crouchedAabb = target_aabb({origin: {x: 0, y: 0, z: 0}, yaw: 0, crouched: true});
-assert.equal(crouchedAabb[14], FPS_CONSTANTS.crouchedHeight + 4,
+assert.equal(crouchedAabb[14], FPS_CONSTANTS.crouchedHeight + 8,
 	"crouched AABB must use the simulated live hull");
 
 const simulation = new FpsSimulation(openMap, {
@@ -366,7 +366,7 @@ alignedSimulation.bot.origin = {x: 200, y: 50, z: 10};
 alignedSimulation.bot.yaw = 90;
 alignedSimulation.set_targets([staleTarget]);
 alignedSimulation.visibility(alignedSimulation.bot, 0);
-assert.ok(Math.abs(alignedPoint.x - 168) < 0.001 && Math.abs(alignedPoint.y - 18) < 0.001,
+assert.ok(Math.abs(alignedPoint.x - 176) < 0.001 && Math.abs(alignedPoint.y - 26) < 0.001,
 	"transferred target data must stay aligned to the worker's current actor pose");
 simulation.set_targets(simulation.bots.map((bot) => capsule_target(bot.origin)));
 simulation.set_debug(true);

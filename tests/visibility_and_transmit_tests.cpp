@@ -366,8 +366,8 @@ void test_visibility_sampling()
 	target.maxs = {16, 16, 72};
 	target.muzzle_class = weapon_muzzle_class::rifle;
 	const auto aabb = visibility_aabb_points(target);
-	assert(aabb.size() == 8 && aabb.front().x == -32.0f && aabb.front().z == 0.0f
-		&& aabb.back().x == 32.0f && aabb.back().z == 76.0f);
+	assert(aabb.size() == 8 && aabb.front().x == -24.0f && aabb.front().z == 0.0f
+		&& aabb.back().x == 24.0f && aabb.back().z == 80.0f);
 	vec3 muzzle;
 	assert(visibility_muzzle_point(target, muzzle));
 	assert(std::fabs(muzzle.x - 36.0f) < 0.01f && std::fabs(muzzle.y) < 0.01f

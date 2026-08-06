@@ -49,11 +49,11 @@ def main() -> None:
     assert "k_visibility_capsule_count = 19" in sampling_h
 
     assert "k_visibility_aabb_point_count = 8" in sampling_h
-    assert "k_horizontal_bounds_padding = 16.0f" in sampling_cpp
-    assert "k_top_bounds_padding = 4.0f" in sampling_cpp
-    assert "const k_horizontal_bounds_padding = 16" in viewer
-    assert "const k_top_bounds_padding = 4" in viewer
-    assert "bot.origin.x - 32" in fps and "height + 4" in fps
+    assert "k_horizontal_bounds_padding = 8.0f" in sampling_cpp
+    assert "k_top_bounds_padding = 8.0f" in sampling_cpp
+    assert "const k_horizontal_bounds_padding = 8" in viewer
+    assert "const k_top_bounds_padding = 8" in viewer
+    assert "bot.origin.x - 24" in fps and "height + 8" in fps
 
     order = [
         worker.index("pair_started < revealed_until_"),
